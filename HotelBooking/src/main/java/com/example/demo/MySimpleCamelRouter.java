@@ -12,16 +12,14 @@ public class MySimpleCamelRouter extends RouteBuilder {
     public void configure() throws Exception {
         restConfiguration()
                 .component("servlet")
-                .port(8080).host("localhost")
                 .bindingMode(RestBindingMode.json);
 
         rest().get("/bookHotel")
                 .to("direct:bookHotel");
 
         from("direct:bookHotel")
-                .log(LoggingLevel.INFO, "Book hotel request")
-                .setBody(constant("{ \"bookingId\": 125, \"hotel\": \"Hilton New York\", \"startDate\": \"13-11-2018\", \"endDate\": \"14-11-2018\", \"price\": 125 }"))
-                .unmarshal()
-                .json(JsonLibrary.Jackson);
+                .log(LoggingLevel.INFO, "New book hotel request with traceId=${header.x-b3-traceid}")
+                .bean(new AvailableHotels(),"getAvailableHotel")
+                .unmarshal().json(JsonLibrary.Jackson);
     }
 }
