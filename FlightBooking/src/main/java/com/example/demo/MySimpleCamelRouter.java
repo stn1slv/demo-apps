@@ -18,10 +18,9 @@ public class MySimpleCamelRouter extends RouteBuilder {
         rest().get("/bookFlight")
                 .to("direct:bookFlight");
 
-        from("direct:bookFlight")
-                .log(LoggingLevel.INFO, "Book flight request")
-                .setBody(constant("{ \"bookingId\": 127, \"flightNumber\": \"SU 0102\", \"startDate\": \"11-11-2018\", \"endDate\": \"15-11-2018\", \"price\": 355 }"))
-                .unmarshal()
-                .json(JsonLibrary.Jackson);
+        from("direct:bookFlight").routeId("bookFlight-http")
+                .log(LoggingLevel.INFO, "New book flight request with traceId=${header.x-b3-traceid}")
+                .bean(new AvailableFlights(),"getAvailableFlight")
+                .unmarshal().json(JsonLibrary.Jackson);
     }
 }

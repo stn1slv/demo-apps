@@ -17,7 +17,7 @@ public class MySimpleCamelRouter extends RouteBuilder {
         rest().get("/bookHotel")
                 .to("direct:bookHotel");
 
-        from("direct:bookHotel")
+        from("direct:bookHotel").routeId("bookHotel-http")
                 .log(LoggingLevel.INFO, "New book hotel request with traceId=${header.x-b3-traceid}")
                 .bean(new AvailableHotels(),"getAvailableHotel")
                 .unmarshal().json(JsonLibrary.Jackson);
