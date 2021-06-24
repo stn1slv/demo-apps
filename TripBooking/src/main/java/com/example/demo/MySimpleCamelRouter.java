@@ -14,8 +14,9 @@ public class MySimpleCamelRouter extends RouteBuilder {
                 .component("servlet")
                 .bindingMode(RestBindingMode.json);
 
-        rest().get("/bookTrip")
-                .to("direct:bookTrip");
+        rest()
+                .get("/bookTrip").to("direct:bookTrip")
+                .get("/asyncBookTrip").to("direct:asyncBookTrip");
 
         from("direct:bookTrip")
                 .routeId("bookTrip-http")
@@ -31,5 +32,19 @@ public class MySimpleCamelRouter extends RouteBuilder {
                 .end()
                 .log(LoggingLevel.INFO,"Response: \n${body}")
                 .unmarshal().json(JsonLibrary.Jackson);
+
+        // kafka based 
+        from("direct:asyncBookTrip")
+                .routeId("bookTrip-kafka")
+                .routeDescription("This is demo service for demonstration telemetry aspects via Kafka")
+                .log(LoggingLevel.INFO, "New book trip request via Kafka")
+                // .to("log:debug?showAll=true&multiline=true")
+                .setBody(simple("New async request ${header.x-b3-traceid}"))
+                .multicast().parallelProcessing()
+                        .to("kafka:car_input?brokers=kafka:9092")
+                        .to("kafka:flight_input?brokers=kafka:9092")
+                        .to("kafka:hotel_input?brokers=kafka:9092")
+                .end();
+        
     }
 }
