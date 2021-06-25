@@ -21,7 +21,7 @@ public class MySimpleCamelRouter extends RouteBuilder {
         from("direct:bookTrip")
                 .routeId("bookTrip-http")
                 .routeDescription("This is demo service for demonstration telemetry aspects")
-                .log(LoggingLevel.INFO, "New book trip request with traceId=${header.x-b3-traceid}")
+                .log(LoggingLevel.INFO, "New book trip request with traceId=${header.x-b3-traceid}"
                 .multicast(new MergeAggregationStrategy()).parallelProcessing()
                         // .to("http://localhost:8081/camel/bookCar?bridgeEndpoint=true")
                         // .to("http://localhost:8082/camel/bookFlight?bridgeEndpoint=true")
@@ -35,7 +35,7 @@ public class MySimpleCamelRouter extends RouteBuilder {
 
         // kafka based 
         from("direct:asyncBookTrip")
-                .routeId("bookTrip-kafka")
+                .routeId("bookTrip-kafka-request")
                 .routeDescription("This is demo service for demonstration telemetry aspects via Kafka")
                 .log(LoggingLevel.INFO, "New book trip request via Kafka")
                 // .to("log:debug?showAll=true&multiline=true")
@@ -46,5 +46,13 @@ public class MySimpleCamelRouter extends RouteBuilder {
                         .to("kafka:hotel_input?brokers=kafka:9092")
                 .end();
         
+        from("kafka:car_output?brokers=kafka:9092").to("seda:tripAggregator");
+        from("kafka:flight_output?brokers=kafka:9092").to("seda:tripAggregator");
+        from("kafka:hotel_output?brokers=kafka:9092").to("seda:tripAggregator");
+        
+        from("seda:tripAggregator").routeId("bookTrip-kafka-response")
+                .aggregate(constant(true), new MergeAggregationStrategy())
+                .completionSize(3)
+                .log(LoggingLevel.INFO, "New book trip response: ${body}");
     }
 }
