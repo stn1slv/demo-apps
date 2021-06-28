@@ -1,0 +1,72 @@
+# Apache Camel: Telemetry demo
+This directory contains sources of demo apps based on Apache Camel.
+![Demo case](.img/telemetry.png?raw=true)
+The environment is the following:
+-  Demo apps:
+    - [Trip booking app](TripBooking)
+    - [Flight booking app](FlightBooking)
+    - [Hotel booking app](HotelBooking)
+    - [Car booking app](CarBooking)
+- Apache Kafka
+- Zipkin
+- Prometheus
+- FileBeat
+- ElasticSearch
+- Kibana
+- Grafana, including:
+    - Preconfigured datasources for Zipkin, Prometheus and ElasticSearch
+    - Dashboard for Apache Camel apps
+    - Dashboard for Logs from ElasticSearch
+## Preparing
+Clone [docker-envs](https://github.com/stn1slv/docker-envs) repo:
+```
+git clone https://github.com/stn1slv/docker-envs.git
+```
+
+Go to root directory of the repo:
+```
+cd docker-envs
+```
+All the following docker-compose commands should be run from this directory.
+## Running
+You may want to remove any old containers to start clean:
+```
+docker rm -f kafka zookeeper prometheus grafana kibana elasticsearch zipkin filebeat tripbooking carbooking flightbooking hotelbooking
+```
+
+We suggest using two terminal windows to start the following components: 
+- infrastructure components
+- demo apps
+#### Startup infrastructure components
+```
+docker-compose -f compose.yml -f kafka\compose-cp.yml -f zipkin\compose.yml -f elasticsearch\compose.yml -f prometheus\compose.yml -f filebeat\compose.yml -f kibana\compose.yml -f grafana\compose.yml up
+```
+
+#### Startup demo apps
+
+```
+docker-compose -f compose.yml -f demo-apps\compose-kafka.yml up
+```
+## Testing
+Testing tools are following:
+- Any HTTP client (web browser, curl, httpie, postman etc.)
+- Apache JMeter for generation load 
+#### cURL
+Sync communication (over HTTP):
+```
+curl http://127.0.0.1:8080/camel/bookTrip
+```
+Async communication (over Kafka):
+```
+curl http://127.0.0.1:8080/camel/asyncBookTrip
+```
+#### Apache JMeter
+You can find JMeter project by [the link](TripBooking/Demo.jmx).
+
+## Links
+- Prometheus UI: http://localhost:9090/graph 
+- Zipkin UI: http://localhost:9411/zipkin
+- Grafana: http://localhost:3000/ 
+    - username: admin
+    - password: admin
+- Kibana: http://localhost:5601/
