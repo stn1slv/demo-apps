@@ -21,7 +21,7 @@ public class MySimpleCamelRouter extends RouteBuilder {
         from("direct:bookTrip")
                 .routeId("bookTrip-http")
                 .routeDescription("This is demo service for demonstration telemetry aspects")
-                .log(LoggingLevel.INFO, "New book trip request with traceId=${header.x-b3-traceid}"
+                .log(LoggingLevel.INFO, "New book trip request with traceId=${header.x-b3-traceid}")
                 .multicast(new MergeAggregationStrategy()).parallelProcessing()
                         // .to("http://localhost:8081/camel/bookCar?bridgeEndpoint=true")
                         // .to("http://localhost:8082/camel/bookFlight?bridgeEndpoint=true")
@@ -30,7 +30,7 @@ public class MySimpleCamelRouter extends RouteBuilder {
                         .to("http://flightbooking:8080/camel/bookFlight?bridgeEndpoint=true")
                         .to("http://hotelbooking:8080/camel/bookHotel?bridgeEndpoint=true")
                 .end()
-                .log(LoggingLevel.INFO,"Response: \n${body}")
+                .log(LoggingLevel.INFO,"Response: ${body}")
                 .unmarshal().json(JsonLibrary.Jackson);
 
         // kafka based 
