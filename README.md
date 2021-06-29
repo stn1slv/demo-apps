@@ -1,13 +1,12 @@
 # Apache Camel: Telemetry demo
 This directory contains sources of demo apps based on Apache Camel.
-![Demo case](.img/telemetry.png?raw=true)
+![Demo case](.img/telemetry2.png?raw=true)
 The environment is the following:
 -  Demo apps:
     - [Trip booking app](TripBooking)
     - [Flight booking app](FlightBooking)
     - [Hotel booking app](HotelBooking)
     - [Car booking app](CarBooking)
-- Apache Kafka
 - Zipkin
 - Prometheus
 - FileBeat
@@ -45,7 +44,7 @@ docker-compose -f compose.yml -f kafka\compose-cp.yml -f zipkin\compose.yml -f e
 #### Startup demo apps
 
 ```
-docker-compose -f compose.yml -f demo-apps\compose-kafka.yml up
+docker-compose -f compose.yml -f demo-apps\compose.yml up
 ```
 ## Testing
 Testing tools are following:
@@ -55,10 +54,6 @@ Testing tools are following:
 Sync communication (over HTTP):
 ```
 curl http://127.0.0.1:8080/camel/bookTrip
-```
-Async communication (over Kafka):
-```
-curl http://127.0.0.1:8080/camel/asyncBookTrip
 ```
 #### Apache JMeter
 You can find JMeter project by [the link](TripBooking/Demo.jmx).
