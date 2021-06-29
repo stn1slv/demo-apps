@@ -31,13 +31,13 @@ jobs:
           ${{ runner.os }}-maven-
         
     - name: Build TripBooking app
-      run: mvn -B package --file TripBooking/pom.xml
+      run: mvn -B package -DskipTests --file TripBooking/pom.xml
     
     - name: Build FlightBooking app
-      run: mvn -B package --file FlightBooking/pom.xml
+      run: mvn -B package -DskipTests --file FlightBooking/pom.xml
       
     - name: Build HotelBooking app
-      run: mvn -B package --file HotelBooking/pom.xml
+      run: mvn -B package -DskipTests --file HotelBooking/pom.xml
       
     - name: Build CarBooking app
-      run: mvn -B package --file CarBooking/pom.xml
+      run: mvn -B package -DskipTests --file CarBooking/pom.xml
