@@ -21,5 +21,13 @@ public class MySimpleCamelRouter extends RouteBuilder {
                 .log(LoggingLevel.INFO, "New book hotel request with traceId=${header.x-b3-traceid}")
                 .bean(new AvailableHotels(),"getAvailableHotel")
                 .unmarshal().json(JsonLibrary.Jackson);
+
+                        
+        // kafka based 
+        from("kafka:hotel_input?brokers=kafka:9092").routeId("bookHotel-kafka")
+                .log(LoggingLevel.INFO, "New book hotel request via Kafka topic")
+                // .to("log:debug?showAll=true&multiline=true")
+                .bean(new AvailableHotels(),"getAvailableHotel")
+                .to("kafka:hotel_output?brokers=kafka:9092");
     }
 }

@@ -14,8 +14,9 @@ public class MySimpleCamelRouter extends RouteBuilder {
                 .component("servlet")
                 .bindingMode(RestBindingMode.json);
 
-        rest().get("/bookTrip")
-                .to("direct:bookTrip");
+        rest()
+                .get("/bookTrip").to("direct:bookTrip")
+                .get("/asyncBookTrip").to("direct:asyncBookTrip");
 
         from("direct:bookTrip")
                 .routeId("bookTrip-http")
@@ -29,7 +30,29 @@ public class MySimpleCamelRouter extends RouteBuilder {
                         .to("http://flightbooking:8080/camel/bookFlight?bridgeEndpoint=true")
                         .to("http://hotelbooking:8080/camel/bookHotel?bridgeEndpoint=true")
                 .end()
-                .log(LoggingLevel.INFO,"Response: \n${body}")
+                .log(LoggingLevel.INFO,"Response: ${body}")
                 .unmarshal().json(JsonLibrary.Jackson);
+
+        // kafka based 
+        from("direct:asyncBookTrip")
+                .routeId("bookTrip-kafka-request")
+                .routeDescription("This is demo service for demonstration telemetry aspects via Kafka")
+                .log(LoggingLevel.INFO, "New book trip request via Kafka")
+                // .to("log:debug?showAll=true&multiline=true")
+                .setBody(simple("New async request ${header.x-b3-traceid}"))
+                .multicast().parallelProcessing()
+                        .to("kafka:car_input?brokers=kafka:9092")
+                        .to("kafka:flight_input?brokers=kafka:9092")
+                        .to("kafka:hotel_input?brokers=kafka:9092")
+                .end();
+        
+        from("kafka:car_output?brokers=kafka:9092").to("seda:tripAggregator");
+        from("kafka:flight_output?brokers=kafka:9092").to("seda:tripAggregator");
+        from("kafka:hotel_output?brokers=kafka:9092").to("seda:tripAggregator");
+        
+        from("seda:tripAggregator").routeId("bookTrip-kafka-response")
+                .aggregate(constant(true), new MergeAggregationStrategy())
+                .completionSize(3)
+                .log(LoggingLevel.INFO, "New book trip response: ${body}");
     }
 }
