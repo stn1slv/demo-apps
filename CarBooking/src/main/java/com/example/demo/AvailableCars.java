@@ -27,6 +27,13 @@ public class AvailableCars {
     @Handler
     public String getAvailableCar(){
         int index = (new Random()).nextInt(cars.size());
+
+        //START: Simulate errors
+        if (index>=0 & index<3){
+            throw new IllegalArgumentException("Some custom exception");
+        }
+        //END: Simulate errors
+
         String jsonResult= "{"+
                 " \"bookingId\": "+(new Random()).nextInt(1000)+"," +
                 " \"car\": \""+cars.get(index)+"\"," +
