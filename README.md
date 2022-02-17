@@ -14,9 +14,10 @@ The environment is the following:
 - ElasticSearch
 - Kibana
 - Grafana, including:
-    - Preconfigured datasources for Prometheus and ElasticSearch
+    - Preconfigured datasources for Jaeger, Prometheus and ElasticSearch
     - Dashboard for Apache Camel apps
     - Dashboard for Logs from ElasticSearch
+    - Dashboard for Jaeger
 ## Preparing
 Clone [docker-envs](https://github.com/stn1slv/docker-envs) repo:
 ```
