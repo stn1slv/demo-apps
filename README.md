@@ -9,6 +9,7 @@ The environment is the following:
     - [Car booking app](CarBooking)
 - Apache Kafka
 - Jaeger
+- OpenTelemetry Collector
 - Prometheus
 - FileBeat
 - ElasticSearch
@@ -32,7 +33,7 @@ All the following docker-compose commands should be run from this directory.
 ## Running
 You may want to remove any old containers to start clean:
 ```
-docker rm -f kafka zookeeper prometheus grafana kibana elasticsearch jaeger filebeat tripbooking carbooking flightbooking hotelbooking
+docker rm -f kafka zookeeper prometheus grafana kibana elasticsearch jaeger otel-collector filebeat tripbooking carbooking flightbooking hotelbooking
 ```
 
 We suggest using two terminal windows to start the following components: 
@@ -40,7 +41,7 @@ We suggest using two terminal windows to start the following components:
 - demo apps
 #### Startup infrastructure components
 ```
-docker-compose -f compose.yml -f kafka/compose-cp.yml -f jaeger/streaming.yml -f elasticsearch/compose.yml -f prometheus/compose.yml -f filebeat/compose.yml -f kibana/compose.yml -f grafana/compose.yml up
+docker-compose -f compose.yml -f kafka/compose-cp.yml -f jaeger/streaming.yml -f otel-collector/compose.yml -f elasticsearch/compose.yml -f prometheus/compose.yml -f filebeat/compose.yml -f kibana/compose.yml -f grafana/compose.yml up
 ```
 
 #### Startup demo apps
