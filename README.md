@@ -39,13 +39,13 @@ We suggest using two terminal windows to start the following components:
 - demo apps
 #### Startup infrastructure components
 ```
-docker-compose -f compose.yml -f kafka\compose-cp.yml -f zipkin\compose.yml -f elasticsearch\compose.yml -f prometheus\compose.yml -f filebeat\compose.yml -f kibana\compose.yml -f grafana\compose.yml up
+docker-compose -f compose.yml -f kafka/compose-cp.yml -f jaeger/compose.yml -f elasticsearch/compose.yml -f prometheus/compose.yml -f filebeat/compose.yml -f kibana/compose.yml -f grafana/compose.yml up
 ```
 
 #### Startup demo apps
 
 ```
-docker-compose -f compose.yml -f demo-apps\compose-kafka.yml up
+docker-compose -f compose.yml -f demo-apps/compose-jaeger.yml up
 ```
 ## Testing
 Testing tools are following:
