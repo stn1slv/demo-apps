@@ -79,28 +79,12 @@
 			<artifactId>camel-bean-starter</artifactId>
 			<version>${camel.version}</version>
 		</dependency>
-		<!-- OpenTracing -->
+				
+		<!-- OpenTelemetry -->
 		<dependency>
 			<groupId>org.apache.camel.springboot</groupId>
-			<artifactId>camel-opentracing-starter</artifactId>
+			<artifactId>camel-opentelemetry-starter</artifactId>
 			<version>${camel.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>io.opentracing.contrib</groupId>
-			<artifactId>opentracing-spring-jaeger-web-starter</artifactId>
-			<version>${io.opentracing.contrib.version}</version>
-		</dependency>
-
-		<!-- Jaeger libs -->
-		<dependency>
-			<groupId>io.jaegertracing</groupId>
-			<artifactId>jaeger-core</artifactId>
-			<version>${jaeger.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>io.jaegertracing</groupId>
-			<artifactId>jaeger-thrift</artifactId>
-			<version>${jaeger.version}</version>
 		</dependency>
 
 		<!-- Testing -->
