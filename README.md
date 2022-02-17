@@ -47,7 +47,7 @@ docker-compose -f compose.yml -f kafka/compose-cp.yml -f jaeger/streaming.yml -f
 #### Startup demo apps
 
 ```
-docker-compose -f compose.yml -f demo-apps/compose-jaeger.yml up
+docker-compose -f compose.yml -f demo-apps/compose-otel.yml up
 ```
 ## Testing
 Testing tools are following:
