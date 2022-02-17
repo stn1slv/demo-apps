@@ -8,13 +8,13 @@ The environment is the following:
     - [Hotel booking app](HotelBooking)
     - [Car booking app](CarBooking)
 - Apache Kafka
-- Zipkin
+- Jaeger
 - Prometheus
 - FileBeat
 - ElasticSearch
 - Kibana
 - Grafana, including:
-    - Preconfigured datasources for Zipkin, Prometheus and ElasticSearch
+    - Preconfigured datasources for Prometheus and ElasticSearch
     - Dashboard for Apache Camel apps
     - Dashboard for Logs from ElasticSearch
 ## Preparing
@@ -31,7 +31,7 @@ All the following docker-compose commands should be run from this directory.
 ## Running
 You may want to remove any old containers to start clean:
 ```
-docker rm -f kafka zookeeper prometheus grafana kibana elasticsearch zipkin filebeat tripbooking carbooking flightbooking hotelbooking
+docker rm -f kafka zookeeper prometheus grafana kibana elasticsearch jaeger filebeat tripbooking carbooking flightbooking hotelbooking
 ```
 
 We suggest using two terminal windows to start the following components: 
@@ -39,13 +39,13 @@ We suggest using two terminal windows to start the following components:
 - demo apps
 #### Startup infrastructure components
 ```
-docker-compose -f compose.yml -f kafka\compose-cp.yml -f zipkin\compose.yml -f elasticsearch\compose.yml -f prometheus\compose.yml -f filebeat\compose.yml -f kibana\compose.yml -f grafana\compose.yml up
+docker-compose -f compose.yml -f kafka/compose-cp.yml -f jaeger/compose.yml -f elasticsearch/compose.yml -f prometheus/compose.yml -f filebeat/compose.yml -f kibana/compose.yml -f grafana/compose.yml up
 ```
 
 #### Startup demo apps
 
 ```
-docker-compose -f compose.yml -f demo-apps\compose-kafka.yml up
+docker-compose -f compose.yml -f demo-apps/compose-jaeger.yml up
 ```
 ## Testing
 Testing tools are following:
