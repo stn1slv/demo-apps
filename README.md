@@ -1,4 +1,4 @@
-# Apache Camel: Telemetry demo
+# Apache Camel: Telemetry demo with OpenTelemetry
 This directory contains sources of demo apps based on Apache Camel.
 ![Demo case](.img/telemetry.png?raw=true)
 The environment is the following:
