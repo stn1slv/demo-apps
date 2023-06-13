@@ -1,6 +1,10 @@
-# Apache Camel: Telemetry demo with OpenTelemetry
-This directory contains sources of demo apps based on Apache Camel.
+# Apache Camel: Telemetry demo
+This directory contains sources of demo apps based on Apache Camel with OpenTelemetry.
 ![Demo case](.img/telemetry.png?raw=true)
+Also, there are the following alternative options:
+- [OpenTracing with Jaeger](https://github.com/stn1slv/demo-apps/tree/jaeger)
+- [Zipkin](https://github.com/stn1slv/demo-apps/tree/zipkin)
+
 The environment is the following:
 -  Demo apps:
     - [Trip booking app](TripBooking)
@@ -11,6 +15,7 @@ The environment is the following:
 - Jaeger
 - OpenTelemetry Collector
 - Prometheus
+- Grafana
 - FileBeat
 - ElasticSearch
 - Kibana
@@ -24,7 +29,6 @@ Clone [docker-envs](https://github.com/stn1slv/docker-envs) repo:
 ```
 git clone https://github.com/stn1slv/docker-envs.git
 ```
-
 Go to root directory of the repo:
 ```
 cd docker-envs
@@ -35,7 +39,6 @@ You may want to remove any old containers to start clean:
 ```
 docker rm -f kafka zookeeper prometheus grafana kibana elasticsearch jaeger otel-collector filebeat tripbooking carbooking flightbooking hotelbooking
 ```
-
 We suggest using two terminal windows to start the following components: 
 - infrastructure components
 - demo apps
@@ -43,9 +46,7 @@ We suggest using two terminal windows to start the following components:
 ```
 docker-compose -f compose.yml -f kafka/compose-cp.yml -f jaeger/streaming.yml -f otel-collector/compose.yml -f elasticsearch/compose.yml -f prometheus/compose.yml -f filebeat/compose.yml -f kibana/compose.yml -f grafana/compose.yml up
 ```
-
-#### Startup demo apps
-
+### Startup demo apps
 ```
 docker-compose -f compose.yml -f demo-apps/compose-otel.yml up
 ```
@@ -65,10 +66,10 @@ curl http://127.0.0.1:8080/camel/asyncBookTrip
 #### Apache JMeter
 You can find JMeter project by [the link](TripBooking/Demo.jmx).
 
-## Links
-- Prometheus UI: http://localhost:9090/graph 
-- Zipkin UI: http://localhost:9411/zipkin
-- Grafana: http://localhost:3000/ 
-    - username: admin
-    - password: admin
-- Kibana: http://localhost:5601/
+### OpenTracing
+The source codes and readme are available in [jaeger](https://github.com/stn1slv/demo-apps/tree/jaeger) branch of the repo.
+![OpenTelemetry](https://raw.githubusercontent.com/stn1slv/demo-apps/jaeger/.img/telemetry.png)
+
+### Zipkin
+The source codes and readme are available in [zipkin](https://github.com/stn1slv/demo-apps/tree/zipkin) branch of the repo.
+![Zipkin](https://raw.githubusercontent.com/stn1slv/demo-apps/zipkin/.img/telemetry.png)
