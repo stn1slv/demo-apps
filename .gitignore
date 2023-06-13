@@ -13,6 +13,21 @@ buildNumber.properties
 .project
 .classpath
 
+#Intellij
+.idea
+.idea/*
+!.idea/codeStyles
+!.idea/runConfigurations
+.idea/artifacts
+.idea/compiler.xml
+.idea/jarRepositories.xml
+.idea/modules.xml
+.idea/*.iml
+.idea/modules
+.idea/vcs.xml
+*.iml
+*.ipr
+
 # VSCode
 .vscode
 .vscode/*
