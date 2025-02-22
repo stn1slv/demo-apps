@@ -4,7 +4,7 @@ WORKDIR /var/src/app
 COPY . .
 RUN mvn -DskipTests clean package && mv target/*.jar target/app.jar
 # Download OpenTelemetry Java Agent
-ENV OTEL_AGENT_VERSION=v1.33.2
+ENV OTEL_AGENT_VERSION=v2.13.1
 RUN wget https://github.com/open-telemetry/opentelemetry-java-instrumentation/releases/download/$OTEL_AGENT_VERSION/opentelemetry-javaagent.jar -P /var/src/app/target
 
 FROM eclipse-temurin:17-jre
