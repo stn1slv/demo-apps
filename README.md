@@ -1,9 +1,6 @@
 # Apache Camel: Telemetry demo
 This directory contains sources of demo apps based on Apache Camel with OpenTelemetry.
 ![Demo case](.img/telemetry.png?raw=true)
-Also, there are the following alternative options:
-- [OpenTracing with Jaeger](#OpenTracing)
-- [Zipkin](#Zipkin)
 
 The environment is the following:
 -  Demo apps:
@@ -44,7 +41,7 @@ We suggest using two terminal windows to start the following components:
 - demo apps
 #### Startup infrastructure components
 ```
-docker-compose -f compose.yml -f kafka/compose.yml -f jaeger/compose.yml -f otel-collector/compose.yml -f elasticsearch/compose.yml -f prometheus/compose.yml -f filebeat/compose.yml -f kibana/compose.yml -f grafana/compose.yml up
+docker-compose -f compose.yml -f kafka/compose.yml -f jaeger/compose.yml -f otel-collector/compose.yml -f prometheus/compose.yml -f grafana/compose.yml -f filebeat/compose.yml -f elasticsearch/compose.yml -f kibana/compose.yml up
 ```
 ### Startup demo apps
 ```
@@ -65,12 +62,3 @@ curl http://127.0.0.1:8080/camel/asyncBookTrip
 ```
 #### Apache JMeter
 You can find JMeter project by [the link](TripBooking/Demo.jmx).
-
-## Alternative options
-### OpenTracing
-The source codes and readme are available in [jaeger](https://github.com/stn1slv/demo-apps/tree/jaeger) branch of the repo.
-![OpenTelemetry](https://raw.githubusercontent.com/stn1slv/demo-apps/jaeger/.img/telemetry.png)
-
-### Zipkin
-The source codes and readme are available in [zipkin](https://github.com/stn1slv/demo-apps/tree/zipkin) branch of the repo.
-![Zipkin](https://raw.githubusercontent.com/stn1slv/demo-apps/zipkin/.img/telemetry.png)
