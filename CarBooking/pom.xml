@@ -85,7 +85,11 @@
 			<artifactId>camel-opentelemetry-starter</artifactId>
 			<version>${camel.version}</version>
 		</dependency>
-
+		<!-- Micrometer to OpenTelemetry bridge for metrics -->
+		<dependency>
+			<groupId>io.micrometer</groupId>
+			<artifactId>micrometer-registry-otlp</artifactId>
+		</dependency>
 		<!-- Testing -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
