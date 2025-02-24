@@ -21,14 +21,11 @@ public class MySimpleCamelRouter extends RouteBuilder {
         from("direct:bookTrip")
                 .routeId("bookTrip-http")
                 .routeDescription("This is demo service for demonstration telemetry aspects")
-                .log(LoggingLevel.INFO, "New book trip request with traceId=${header.x-b3-traceid}")
+                .log(LoggingLevel.INFO, "New book trip request via HTTP")
                 .multicast(new MergeAggregationStrategy()).parallelProcessing()
-                        // .to("http://localhost:8081/camel/bookCar?bridgeEndpoint=true")
-                        // .to("http://localhost:8082/camel/bookFlight?bridgeEndpoint=true")
-                        // .to("http://localhost:8083/camel/bookHotel?bridgeEndpoint=true")
-                        .to("http://carbooking:8080/camel/bookCar?bridgeEndpoint=true")
-                        .to("http://flightbooking:8080/camel/bookFlight?bridgeEndpoint=true")
-                        .to("http://hotelbooking:8080/camel/bookHotel?bridgeEndpoint=true")
+                        .to("{{car.booking.url}}?bridgeEndpoint=true")
+                        .to("{{flight.booking.url}}?bridgeEndpoint=true")
+                        .to("{{hotel.booking.url}}?bridgeEndpoint=true")
                 .end()
                 .log(LoggingLevel.INFO,"Response: ${body}")
                 .unmarshal().json(JsonLibrary.Jackson);
@@ -38,17 +35,16 @@ public class MySimpleCamelRouter extends RouteBuilder {
                 .routeId("bookTrip-kafka-request")
                 .routeDescription("This is demo service for demonstration telemetry aspects via Kafka")
                 .log(LoggingLevel.INFO, "New book trip request via Kafka")
-                // .to("log:debug?showAll=true&multiline=true")
-                .setBody(simple("New async request ${header.x-b3-traceid}"))
+                .setBody(simple("New async request"))
                 .multicast().parallelProcessing()
-                        .to("kafka:car_input?brokers=kafka:9092")
-                        .to("kafka:flight_input?brokers=kafka:9092")
-                        .to("kafka:hotel_input?brokers=kafka:9092")
+                        .to("kafka:car_input?brokers={{kafka.brokers}}")
+                        .to("kafka:flight_input?brokers={{kafka.brokers}}")
+                        .to("kafka:hotel_input?brokers={{kafka.brokers}}")
                 .end();
         
-        from("kafka:car_output?brokers=kafka:9092").to("seda:tripAggregator");
-        from("kafka:flight_output?brokers=kafka:9092").to("seda:tripAggregator");
-        from("kafka:hotel_output?brokers=kafka:9092").to("seda:tripAggregator");
+        from("kafka:car_output?brokers={{kafka.brokers}}").to("seda:tripAggregator");
+        from("kafka:flight_output?brokers={{kafka.brokers}}").to("seda:tripAggregator");
+        from("kafka:hotel_output?brokers={{kafka.brokers}}").to("seda:tripAggregator");
         
         from("seda:tripAggregator").routeId("bookTrip-kafka-response")
                 .aggregate(constant(true), new MergeAggregationStrategy())
