@@ -41,7 +41,7 @@ We suggest using two terminal windows to start the following components:
 - demo apps
 #### Startup infrastructure components
 ```
-docker-compose -f compose.yml -f kafka/compose.yml -f jaeger/compose.yml -f otel-collector/compose.yml -f prometheus/compose.yml -f grafana/compose.yml -f filebeat/compose.yml -f elasticsearch/compose.yml -f kibana/compose.yml up
+docker-compose -f compose.yml -f kafka/compose.yml -f jaeger/compose.yml -f otel-collector/compose.yml -f prometheus/compose.yml -f grafana/compose.yml -f filebeat/compose.yml -f elasticsearch/compose.yml up --remove-orphans
 ```
 ### Startup demo apps
 ```
