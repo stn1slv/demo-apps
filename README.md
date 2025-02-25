@@ -34,7 +34,7 @@ All the following docker-compose commands should be run from this directory.
 ## Running
 You may want to remove any old containers to start clean:
 ```
-docker rm -f kafka zookeeper prometheus grafana kibana elasticsearch jaeger otel-collector filebeat tripbooking carbooking flightbooking hotelbooking
+docker rm -f kafka prometheus grafana kibana elasticsearch jaeger otel-collector filebeat tripbooking carbooking flightbooking hotelbooking
 ```
 We suggest using two terminal windows to start the following components: 
 - infrastructure components
