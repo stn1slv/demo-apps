@@ -37,14 +37,14 @@ public class MySimpleCamelRouter extends RouteBuilder {
                 .log(LoggingLevel.INFO, "New book trip request via Kafka")
                 .setBody(simple("New async request"))
                 .multicast().parallelProcessing()
-                        .to("kafka:car_input?brokers={{kafka.brokers}}")
-                        .to("kafka:flight_input?brokers={{kafka.brokers}}")
-                        .to("kafka:hotel_input?brokers={{kafka.brokers}}")
+                        .to("kafka:car_input")
+                        .to("kafka:flight_input")
+                        .to("kafka:hotel_input")
                 .end();
         
-        from("kafka:car_output?brokers={{kafka.brokers}}").to("seda:tripAggregator");
-        from("kafka:flight_output?brokers={{kafka.brokers}}").to("seda:tripAggregator");
-        from("kafka:hotel_output?brokers={{kafka.brokers}}").to("seda:tripAggregator");
+        from("kafka:car_output").to("seda:tripAggregator");
+        from("kafka:flight_output").to("seda:tripAggregator");
+        from("kafka:hotel_output").to("seda:tripAggregator");
         
         from("seda:tripAggregator").routeId("bookTrip-kafka-response")
                 .aggregate(constant(true), new MergeAggregationStrategy())
