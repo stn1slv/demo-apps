@@ -1,6 +1,7 @@
 # Apache Camel: Telemetry demo
 This directory contains sources of demo apps based on Apache Camel with OpenTelemetry.
-![Demo case](.img/telemetry.png?raw=true)
+![Demo case](.img/telemetry-light.png#gh-light-mode-only)
+![Demo case](.img/telemetry-dark.png#gh-dark-mode-only)
 
 The environment is the following:
 -  Demo apps:
