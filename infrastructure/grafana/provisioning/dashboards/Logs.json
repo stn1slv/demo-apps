@@ -1,0 +1,618 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "gnetId": null,
+  "graphTooltip": 0,
+  "iteration": 1624882556730,
+  "links": [],
+  "panels": [
+    {
+      "datasource": "Elasticsearch",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": null,
+            "filterable": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Timestamp"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 147
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Container"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 134
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Message"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 910
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Severity"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 72
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Class"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 97
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "TraceId"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 144
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 17,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": false,
+            "displayName": "TraceId"
+          }
+        ]
+      },
+      "pluginVersion": "7.5.9",
+      "targets": [
+        {
+          "alias": "",
+          "bucketAggs": [
+            {
+              "field": "@timestamp",
+              "id": "2",
+              "settings": {
+                "interval": "auto"
+              },
+              "type": "date_histogram"
+            }
+          ],
+          "metrics": [
+            {
+              "id": "1",
+              "type": "logs"
+            }
+          ],
+          "query": "container.name:*-app msg.severity:* msg.traceId:*",
+          "refId": "A",
+          "timeField": "@timestamp"
+        }
+      ],
+      "title": "Application logs",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "_id": true,
+              "_index": true,
+              "_source": true,
+              "_type": true,
+              "agent.ephemeral_id": true,
+              "agent.hostname": true,
+              "agent.id": true,
+              "agent.name": true,
+              "agent.type": true,
+              "agent.version": true,
+              "container.id": true,
+              "container.image.name": true,
+              "container.labels.com_docker_compose_config-hash": true,
+              "container.labels.com_docker_compose_container-number": true,
+              "container.labels.com_docker_compose_oneoff": true,
+              "container.labels.com_docker_compose_project": true,
+              "container.labels.com_docker_compose_project_config_files": true,
+              "container.labels.com_docker_compose_project_working_dir": true,
+              "container.labels.com_docker_compose_service": true,
+              "container.labels.com_docker_compose_version": true,
+              "container.labels.description": true,
+              "container.labels.desktop_docker_io/binds/0/Source": true,
+              "container.labels.desktop_docker_io/binds/0/SourceKind": true,
+              "container.labels.desktop_docker_io/binds/0/Target": true,
+              "container.labels.desktop_docker_io/binds/1/Source": true,
+              "container.labels.desktop_docker_io/binds/1/SourceKind": true,
+              "container.labels.desktop_docker_io/binds/1/Target": true,
+              "container.labels.desktop_docker_io/binds/2/Source": true,
+              "container.labels.desktop_docker_io/binds/2/SourceKind": true,
+              "container.labels.desktop_docker_io/binds/2/Target": true,
+              "container.labels.io_k8s_description": true,
+              "container.labels.io_k8s_display-name": true,
+              "container.labels.license": true,
+              "container.labels.maintainer": true,
+              "container.labels.name": true,
+              "container.labels.org_label-schema_build-date": true,
+              "container.labels.org_label-schema_license": true,
+              "container.labels.org_label-schema_name": true,
+              "container.labels.org_label-schema_schema-version": true,
+              "container.labels.org_label-schema_url": true,
+              "container.labels.org_label-schema_usage": true,
+              "container.labels.org_label-schema_vcs-ref": true,
+              "container.labels.org_label-schema_vcs-url": true,
+              "container.labels.org_label-schema_vendor": true,
+              "container.labels.org_label-schema_version": true,
+              "container.labels.org_opencontainers_image_created": true,
+              "container.labels.org_opencontainers_image_documentation": true,
+              "container.labels.org_opencontainers_image_licenses": true,
+              "container.labels.org_opencontainers_image_revision": true,
+              "container.labels.org_opencontainers_image_source": true,
+              "container.labels.org_opencontainers_image_title": true,
+              "container.labels.org_opencontainers_image_url": true,
+              "container.labels.org_opencontainers_image_vendor": true,
+              "container.labels.org_opencontainers_image_version": true,
+              "container.labels.release": true,
+              "container.labels.summary": true,
+              "container.labels.url": true,
+              "container.labels.vendor": true,
+              "container.labels.version": true,
+              "container.name": false,
+              "ecs.version": true,
+              "highlight": true,
+              "host.name": true,
+              "input.type": true,
+              "log.file.path": true,
+              "log.flags": true,
+              "log.offset": true,
+              "message": true,
+              "msg.time": true,
+              "sort": true,
+              "stream": true
+            },
+            "indexByName": {
+              "@timestamp": 0,
+              "_id": 1,
+              "_index": 2,
+              "_source": 3,
+              "_type": 4,
+              "agent.ephemeral_id": 5,
+              "agent.hostname": 6,
+              "agent.id": 7,
+              "agent.name": 8,
+              "agent.type": 9,
+              "agent.version": 10,
+              "container.id": 11,
+              "container.image.name": 12,
+              "container.labels.com_docker_compose_config-hash": 13,
+              "container.labels.com_docker_compose_container-number": 14,
+              "container.labels.com_docker_compose_oneoff": 15,
+              "container.labels.com_docker_compose_project": 16,
+              "container.labels.com_docker_compose_project_config_files": 17,
+              "container.labels.com_docker_compose_project_working_dir": 18,
+              "container.labels.com_docker_compose_service": 19,
+              "container.labels.com_docker_compose_version": 20,
+              "container.name": 21,
+              "ecs.version": 22,
+              "highlight": 23,
+              "host.name": 24,
+              "input.type": 25,
+              "log.file.path": 26,
+              "log.flags": 27,
+              "log.offset": 28,
+              "message": 29,
+              "msg.class": 31,
+              "msg.message": 32,
+              "msg.severity": 30,
+              "msg.spanId": 34,
+              "msg.time": 35,
+              "msg.traceid": 33,
+              "sort": 36,
+              "stream": 37
+            },
+            "renameByName": {
+              "@timestamp": "Timestamp",
+              "container.name": "Container",
+              "ecs.version": "",
+              "msg.class": "Class",
+              "msg.message": "Message",
+              "msg.severity": "Severity",
+              "msg.spanId": "SpanId",
+              "msg.traceid": "TraceId"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": "Elasticsearch",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": null,
+            "filterable": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Timestamp"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 147
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Container"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 134
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Message"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 1524
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Severity"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 72
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Class"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 97
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "TraceId"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 144
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 17,
+        "w": 24,
+        "x": 0,
+        "y": 17
+      },
+      "id": 3,
+      "options": {
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": false,
+            "displayName": "Container"
+          }
+        ]
+      },
+      "pluginVersion": "7.5.9",
+      "targets": [
+        {
+          "alias": "",
+          "bucketAggs": [
+            {
+              "field": "@timestamp",
+              "id": "2",
+              "settings": {
+                "interval": "auto"
+              },
+              "type": "date_histogram"
+            }
+          ],
+          "hide": false,
+          "metrics": [
+            {
+              "id": "1",
+              "type": "logs"
+            }
+          ],
+          "query": "-container.name:*-app",
+          "refId": "A",
+          "timeField": "@timestamp"
+        }
+      ],
+      "title": "System logs",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "_id": true,
+              "_index": true,
+              "_source": true,
+              "_type": true,
+              "agent.ephemeral_id": true,
+              "agent.hostname": true,
+              "agent.id": true,
+              "agent.name": true,
+              "agent.type": true,
+              "agent.version": true,
+              "container.id": true,
+              "container.image.name": true,
+              "container.labels.architecture": true,
+              "container.labels.build-date": true,
+              "container.labels.com_docker_compose_config-hash": true,
+              "container.labels.com_docker_compose_container-number": true,
+              "container.labels.com_docker_compose_oneoff": true,
+              "container.labels.com_docker_compose_project": true,
+              "container.labels.com_docker_compose_project_config_files": true,
+              "container.labels.com_docker_compose_project_working_dir": true,
+              "container.labels.com_docker_compose_service": true,
+              "container.labels.com_docker_compose_version": true,
+              "container.labels.com_redhat_build-host": true,
+              "container.labels.com_redhat_component": true,
+              "container.labels.com_redhat_license_terms": true,
+              "container.labels.description": true,
+              "container.labels.desktop_docker_io/binds/0/Source": true,
+              "container.labels.desktop_docker_io/binds/0/SourceKind": true,
+              "container.labels.desktop_docker_io/binds/0/Target": true,
+              "container.labels.desktop_docker_io/binds/1/Source": true,
+              "container.labels.desktop_docker_io/binds/1/SourceKind": true,
+              "container.labels.desktop_docker_io/binds/1/Target": true,
+              "container.labels.desktop_docker_io/binds/2/Source": true,
+              "container.labels.desktop_docker_io/binds/2/SourceKind": true,
+              "container.labels.desktop_docker_io/binds/2/Target": true,
+              "container.labels.distribution-scope": true,
+              "container.labels.io_confluent_docker": true,
+              "container.labels.io_confluent_docker_build_number": true,
+              "container.labels.io_confluent_docker_git_id": true,
+              "container.labels.io_confluent_docker_git_repo": true,
+              "container.labels.io_k8s_description": true,
+              "container.labels.io_k8s_display-name": true,
+              "container.labels.io_openshift_expose-services": true,
+              "container.labels.io_openshift_tags": true,
+              "container.labels.license": true,
+              "container.labels.maintainer": true,
+              "container.labels.name": true,
+              "container.labels.org_label-schema_build-date": true,
+              "container.labels.org_label-schema_license": true,
+              "container.labels.org_label-schema_name": true,
+              "container.labels.org_label-schema_schema-version": true,
+              "container.labels.org_label-schema_url": true,
+              "container.labels.org_label-schema_usage": true,
+              "container.labels.org_label-schema_vcs-ref": true,
+              "container.labels.org_label-schema_vcs-url": true,
+              "container.labels.org_label-schema_vendor": true,
+              "container.labels.org_label-schema_version": true,
+              "container.labels.org_opencontainers_image_created": true,
+              "container.labels.org_opencontainers_image_documentation": true,
+              "container.labels.org_opencontainers_image_licenses": true,
+              "container.labels.org_opencontainers_image_revision": true,
+              "container.labels.org_opencontainers_image_source": true,
+              "container.labels.org_opencontainers_image_title": true,
+              "container.labels.org_opencontainers_image_url": true,
+              "container.labels.org_opencontainers_image_vendor": true,
+              "container.labels.org_opencontainers_image_version": true,
+              "container.labels.release": true,
+              "container.labels.summary": true,
+              "container.labels.url": true,
+              "container.labels.vcs-ref": true,
+              "container.labels.vcs-type": true,
+              "container.labels.vendor": true,
+              "container.labels.version": true,
+              "container.name": false,
+              "ecs.version": true,
+              "highlight": true,
+              "host.name": true,
+              "input.type": true,
+              "log.file.path": true,
+              "log.flags": true,
+              "log.offset": true,
+              "message": false,
+              "msg.spanId": true,
+              "msg.time": true,
+              "msg.traceid": true,
+              "sort": true,
+              "stream": true
+            },
+            "indexByName": {
+              "@timestamp": 0,
+              "_id": 1,
+              "_index": 2,
+              "_source": 3,
+              "_type": 4,
+              "agent.ephemeral_id": 5,
+              "agent.hostname": 6,
+              "agent.id": 7,
+              "agent.name": 8,
+              "agent.type": 9,
+              "agent.version": 10,
+              "container.id": 11,
+              "container.image.name": 12,
+              "container.labels.com_docker_compose_config-hash": 13,
+              "container.labels.com_docker_compose_container-number": 14,
+              "container.labels.com_docker_compose_oneoff": 15,
+              "container.labels.com_docker_compose_project": 16,
+              "container.labels.com_docker_compose_project_config_files": 17,
+              "container.labels.com_docker_compose_project_working_dir": 18,
+              "container.labels.com_docker_compose_service": 19,
+              "container.labels.com_docker_compose_version": 20,
+              "container.name": 21,
+              "ecs.version": 22,
+              "highlight": 23,
+              "host.name": 24,
+              "input.type": 25,
+              "log.file.path": 26,
+              "log.flags": 27,
+              "log.offset": 28,
+              "message": 29,
+              "msg.class": 31,
+              "msg.message": 32,
+              "msg.severity": 30,
+              "msg.spanId": 34,
+              "msg.time": 35,
+              "msg.traceid": 33,
+              "sort": 36,
+              "stream": 37
+            },
+            "renameByName": {
+              "@timestamp": "Timestamp",
+              "container.name": "Container",
+              "ecs.version": "",
+              "message": "Message",
+              "msg.class": "Class",
+              "msg.message": "Message",
+              "msg.severity": "Severity",
+              "msg.spanId": "SpanId",
+              "msg.traceid": "TraceId"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    }
+  ],
+  "refresh": false,
+  "schemaVersion": 27,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "datasource": "Elasticsearch",
+        "description": null,
+        "error": null,
+        "filters": [],
+        "hide": 0,
+        "label": null,
+        "name": "Filters",
+        "skipUrlSync": false,
+        "type": "adhoc"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-15m",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Logs",
+  "uid": "CmJOR93Gk",
+  "version": 1
+}

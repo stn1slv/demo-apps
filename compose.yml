@@ -1,0 +1,9 @@
+## version: '3.8'
+
+# This files serves as filesystem anchor
+# Including it as first .yml file makes all build paths relative to this directory ('docker')
+#
+# Examples:
+#
+#   docker-compose -f compose.yml -f prometheus/compose.yml -f grafana/compose.yml up --remove-orphans
+#

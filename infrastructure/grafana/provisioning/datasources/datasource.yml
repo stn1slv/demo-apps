@@ -1,0 +1,89 @@
+# config file version
+apiVersion: 1
+
+# list of datasources that should be deleted from the database
+deleteDatasources:
+  - name: Prometheus
+    orgId: 1
+
+# list of datasources to insert/update depending
+# whats available in the database
+datasources:
+- name: Prometheus
+  uid: gdev-prometheus
+  type: prometheus
+  access: proxy
+  orgId: 1
+  url: http://prometheus:9090
+  password: admin
+  user: admin
+  database:
+  basicAuth: true
+  basicAuthUser: admin
+  basicAuthPassword: admin
+  withCredentials:
+  isDefault: true
+  jsonData:
+     graphiteVersion: "1.1"
+     tlsAuth: false
+     tlsAuthWithCACert: false
+  secureJsonData:
+    tlsCACert: "..."
+    tlsClientCert: "..."
+    tlsClientKey: "..."
+  version: 1
+  editable: true
+- name: Elasticsearch
+  uid: 'logs-elastic'
+  orgId: 1
+  type: elasticsearch
+  typeName: Elasticsearch
+  access: proxy
+  url: http://elasticsearch:9200
+  password: 'elastic'
+  user: 'elastic'
+  database: "[filebeat-]YYYY.MM.DD"
+  basicAuth: true
+  isDefault: false
+  jsonData:
+    esVersion: 70
+    interval: Daily
+    logLevelField: ''
+    logMessageField: 'message'
+    maxConcurrentShardRequests: 5
+    timeField: "@timestamp"
+  readOnly: false
+  editable: true
+- name: Jaeger
+  type: jaeger
+  uid: gdev-jaeger
+  access: proxy
+  url: http://jaeger:16686
+  editable: true
+  jsonData:
+    tlsSkipVerify: true
+    tracesToLogsV2:
+      customQuery: true
+      datasourceUid: 'logs-elastic'
+      spanStartTimeShift: '-2h'
+      spanEndTimeShift: '2h'
+      # Filtering by TraceID
+      filterBySpanID: false
+      filterByTraceID: true
+      query: 'msg.traceid:"$${__span.traceId}"'
+      
+      # Filtering by SpanID
+      #filterBySpanID: true
+      #filterByTraceID: false
+      #query: 'msg.spanId:"$${__span.spanId}"'
+      tags: []
+    tracesToMetrics:
+      datasourceUid: 'gdev-prometheus'
+      queries:
+      - name: CPU utilization
+        query: 'system_cpu_usage{$$__tags}'
+      spanEndTimeShift: '2m'
+      spanStartTimeShift: '-2m'
+      tags:
+      - key: application
+        value: exported_job

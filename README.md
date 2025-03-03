@@ -15,22 +15,12 @@ The environment is the following:
 - Grafana
 - FileBeat
 - ElasticSearch
-- Kibana
 - Grafana, including:
     - Preconfigured datasources for Jaeger, Prometheus and ElasticSearch
     - Dashboard for Apache Camel apps
     - Dashboard for Logs from ElasticSearch
     - Dashboard for Jaeger
-## Preparing
-Clone [docker-envs](https://github.com/stn1slv/docker-envs) repo:
-```
-git clone https://github.com/stn1slv/docker-envs.git
-```
-Go to root directory of the repo:
-```
-cd docker-envs
-```
-All the following docker-compose commands should be run from this directory.
+
 ## Running
 You may want to remove any old containers to start clean:
 ```
@@ -39,13 +29,13 @@ docker rm -f kafka prometheus grafana elasticsearch jaeger otel-collector filebe
 We suggest using two terminal windows to start the following components: 
 - infrastructure components
 - demo apps
-#### Startup infrastructure components
+### Startup infrastructure components
 ```
-docker-compose -f compose.yml -f kafka/compose.yml -f jaeger/compose.yml -f otel-collector/compose.yml -f prometheus/compose.yml -f grafana/compose.yml -f filebeat/compose.yml -f elasticsearch/compose.yml up --remove-orphans
+docker-compose -f compose.yml -f compose.infra.yml up --remove-orphans
 ```
 ### Startup demo apps
 ```
-docker-compose -f compose.yml -f demo-apps/compose-otel.yml up
+docker-compose -f compose.yml -f compose.demo-apps.yml up
 ```
 ## Testing
 Testing tools are following:
