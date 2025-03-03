@@ -7,7 +7,8 @@ import java.util.Random;
 import org.apache.camel.Handler;
 
 public class AvailableHotels {
-    private List<String> hotels =  Arrays.asList(
+    private static final Random RANDOM = new Random();
+    private static final List<String> HOTELS = Arrays.asList(
             "Four Seasons",
             "Sheraton",
             "The Ritz",
@@ -16,18 +17,21 @@ public class AvailableHotels {
             "Accor",
             "Hyatt",
             "Radisson"
-        ); 
+    );
 
     @Handler
-    public String getAvailableHotel(){
-        int index = (new Random()).nextInt(hotels.size());
-        String jsonResult= "{"+
-                " \"bookingId\": "+(new Random()).nextInt(1000)+"," +
-                " \"hotel\": \""+hotels.get(index)+"\"," +
-                " \"startDate\": \"12-11-2018\"," +
-                " \"endDate\": \"15-11-2018\"," +
-                " \"price\": "+((new Random()).nextInt(150) + 150) +
-                " }";
-        return jsonResult;
-    }  
+    public String getAvailableHotel() {
+        return String.format("""
+                {
+                    "bookingId": %d,
+                    "hotel": "%s",
+                    "startDate": "12-11-2018",
+                    "endDate": "15-11-2018",
+                    "price": %d
+                }""",
+                RANDOM.nextInt(1000),
+                HOTELS.get(RANDOM.nextInt(HOTELS.size())),
+                RANDOM.nextInt(150) + 150
+        );
+    }
 }
