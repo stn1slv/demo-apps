@@ -1,0 +1,39 @@
+setup.template.name: "filebeat"
+setup.template.pattern: "filebeat"
+setup.ilm.enabled: false
+
+filebeat.inputs:
+- type: container
+  paths: 
+    - '/var/lib/docker/containers/*/*.log'
+
+  multiline.type: pattern
+  multiline.pattern: '^[[:space:]]'
+  multiline.negate: false
+  multiline.match: after
+
+logging.level: warning
+
+processors:
+- add_docker_metadata:
+    host: "unix:///var/run/docker.sock"
+- dissect:
+    tokenizer: "%{time} %{severity} [%{traceid},%{spanId}] %{class} - %{message}"
+    field: "message"
+    target_prefix: "msg"
+# - drop_event:
+#     when:
+#       not:
+#         equals:
+#           container.name: "trip-booking-app"
+
+#FOR DEBUG  
+# output.console:
+#   pretty: true
+  
+output.elasticsearch:
+  hosts: ["http://elasticsearch:9200"]
+  username: "elastic"
+  password: "elastic"
+  # index: "filebeat-%{+yyyy.MM.dd}"
+  index: "filebeat-%{+yyyy.MM.dd}"

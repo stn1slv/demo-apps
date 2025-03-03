@@ -1,0 +1,111 @@
+# version: '3.8'
+
+services:
+    kafka:
+        image: apache/kafka:3.8.1
+        container_name: kafka
+        restart: always
+        environment:
+            KAFKA_NODE_ID: 1
+            KAFKA_PROCESS_ROLES: broker,controller
+            KAFKA_LISTENERS: PLAINTEXT://kafka:9092,CONTROLLER://kafka:9093
+            KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+            KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+            KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+            KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+            KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+            KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+            KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+            KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+            KAFKA_NUM_PARTITIONS: 3
+        ports:
+            - 9092:9092
+    jaeger:
+        image:  jaegertracing/jaeger:2.3.0
+        container_name: jaeger
+        restart: always
+        ports:
+            - 16686:16686 
+            # - 4317:4317  # OTLP gRPC receiver
+            # - 4318:4318  # OTLP HTTP receiver
+            - 5778:5778
+            - 9411:9411
+    otel-collector:
+        image: otel/opentelemetry-collector:0.120.0
+        container_name: otel-collector
+        command: [ "--config=/etc/otel-collector-config.yaml" ]
+        volumes:
+          - ./infrastructure/otel-collector/otel-collector-config.yaml:/etc/otel-collector-config.yaml
+        restart: always
+        ports:
+          - "1888:1888"   # pprof extension
+          - "8888:8888"   # Prometheus metrics exposed by the collector
+          - "8889:8889"   # Prometheus exporter metrics
+          - "13133:13133" # health_check extension
+          - "4317:4317"   # OTLP gRPC receiver
+          - "4318:4318"   # OTLP HTTP receiver
+          - "55670:55679" # zpages extension
+    prometheus:
+        image: prom/prometheus:v2.37.7
+        container_name: prometheus
+        restart: unless-stopped
+        volumes:
+            - ./infrastructure/prometheus/prometheusConfig.yml:/etc/prometheus/prometheus.yml
+        ports:
+            - 9090:9090
+    grafana:
+        image: grafana/grafana:11.5.2
+        container_name: grafana
+        restart: unless-stopped
+        environment:
+            - GF_SECURITY_ADMIN_PASSWORD=admin
+            
+            # Install plugins
+            #- GF_INSTALL_PLUGINS=vonage-status-panel,jdbranham-diagram-panel,agenty-flowcharting-panel,yesoreyeram-boomtable-panel
+            
+            # Log level
+            #- GF_LOG_LEVEL=debug
+        ports:
+            - 3000:3000
+        volumes:
+            - ./infrastructure/grafana/provisioning/dashboards/:/etc/grafana/provisioning/dashboards/
+            - ./infrastructure/grafana/provisioning/datasources/:/etc/grafana/provisioning/datasources/
+    filebeat:
+        image: docker.elastic.co/beats/filebeat:8.17.2
+        container_name: filebeat
+        user: root
+        restart: always
+        volumes: 
+            - /var/lib/docker:/var/lib/docker:ro
+            - /var/run/docker.sock:/var/run/docker.sock
+            - ./infrastructure/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml
+        command: filebeat -e --strict.perms=false -E output.elasticsearch.hosts=["elasticsearch:9200"]
+    elasticsearch:
+        image: docker.elastic.co/elasticsearch/elasticsearch:8.17.2
+        container_name: elasticsearch
+        restart: always
+        deploy:
+            resources:
+                limits:
+                    memory: 1GB
+        environment:
+            - node.name=es01
+            # - cluster.name=docker-cluster
+            - discovery.type=single-node
+            # - bootstrap.memory_lock=true
+            - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+            - xpack.security.enabled=false
+            - ELASTIC_USERNAME=elastic
+            - ELASTIC_PASSWORD=elastic 
+            - "cluster.routing.allocation.disk.threshold_enabled=false"
+            - "node.roles=[data, master, ingest]"  # Explicitly set node roles
+        ulimits:
+            memlock:
+                soft: -1
+                hard: -1
+            nofile:
+                soft: 65536 # maximum number of open files for the Elasticsearch user, set to at least 65536 on modern systems
+                hard: 65536
+        ports:
+            - 9200:9200
+            # - 9300:9300
