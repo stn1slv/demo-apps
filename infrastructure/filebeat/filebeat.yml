@@ -17,10 +17,14 @@ logging.level: warning
 processors:
 - add_docker_metadata:
     host: "unix:///var/run/docker.sock"
+# Field names must stay in sync with the logback.xml pattern, the Grafana
+# Logs dashboard and the Jaeger datasource tracesToLogsV2 query
+# (msg.trace_id / msg.span_id).
 - dissect:
-    tokenizer: "%{time} %{severity} [%{traceid},%{spanId}] %{class} - %{message}"
+    tokenizer: "%{time} %{severity} [%{trace_id},%{span_id}] %{class} - %{message}"
     field: "message"
     target_prefix: "msg"
+    ignore_failure: true
 # - drop_event:
 #     when:
 #       not:

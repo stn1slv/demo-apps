@@ -22,6 +22,12 @@ exporters:
       insecure: true    # Add this to disable TLS
 
 processors:
+  # memory_limiter must be first in every pipeline: it refuses data before
+  # the collector runs out of memory under load (e.g. JMeter runs).
+  memory_limiter:
+    check_interval: 1s
+    limit_mib: 400
+    spike_limit_mib: 100
   batch:
 
 extensions:
@@ -36,10 +42,10 @@ service:
   pipelines:
     traces:
       receivers: [otlp]
-      processors: [batch]
+      processors: [memory_limiter, batch]
       exporters: [otlp/jaeger]
     metrics:
       # receivers: [otlp, prometheus]
       receivers: [otlp]
-      processors: [batch]
+      processors: [memory_limiter, batch]
       exporters: [prometheus]

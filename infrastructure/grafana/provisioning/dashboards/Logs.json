@@ -155,7 +155,7 @@
               "type": "logs"
             }
           ],
-          "query": "container.name:*-app msg.severity:* msg.traceId:*",
+          "query": "container.name:*-app msg.severity:* msg.trace_id:*",
           "refId": "A",
           "timeField": "@timestamp"
         }
@@ -272,9 +272,9 @@
               "msg.class": 31,
               "msg.message": 32,
               "msg.severity": 30,
-              "msg.spanId": 34,
+              "msg.span_id": 34,
               "msg.time": 35,
-              "msg.traceid": 33,
+              "msg.trace_id": 33,
               "sort": 36,
               "stream": 37
             },
@@ -285,8 +285,8 @@
               "msg.class": "Class",
               "msg.message": "Message",
               "msg.severity": "Severity",
-              "msg.spanId": "SpanId",
-              "msg.traceid": "TraceId"
+              "msg.span_id": "SpanId",
+              "msg.trace_id": "TraceId"
             }
           }
         }
@@ -524,9 +524,9 @@
               "log.flags": true,
               "log.offset": true,
               "message": false,
-              "msg.spanId": true,
+              "msg.span_id": true,
               "msg.time": true,
-              "msg.traceid": true,
+              "msg.trace_id": true,
               "sort": true,
               "stream": true
             },
@@ -564,9 +564,9 @@
               "msg.class": 31,
               "msg.message": 32,
               "msg.severity": 30,
-              "msg.spanId": 34,
+              "msg.span_id": 34,
               "msg.time": 35,
-              "msg.traceid": 33,
+              "msg.trace_id": 33,
               "sort": 36,
               "stream": 37
             },
@@ -578,8 +578,8 @@
               "msg.class": "Class",
               "msg.message": "Message",
               "msg.severity": "Severity",
-              "msg.spanId": "SpanId",
-              "msg.traceid": "TraceId"
+              "msg.span_id": "SpanId",
+              "msg.trace_id": "TraceId"
             }
           }
         }

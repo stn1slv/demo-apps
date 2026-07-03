@@ -46,7 +46,6 @@ datasources:
   basicAuth: true
   isDefault: false
   jsonData:
-    esVersion: 70
     interval: Daily
     logLevelField: ''
     logMessageField: 'message'
@@ -70,12 +69,12 @@ datasources:
       # Filtering by TraceID
       filterBySpanID: false
       filterByTraceID: true
-      query: 'msg.traceid:"$${__span.traceId}"'
-      
+      query: 'msg.trace_id:"$${__span.traceId}"'
+
       # Filtering by SpanID
       #filterBySpanID: true
       #filterByTraceID: false
-      #query: 'msg.spanId:"$${__span.spanId}"'
+      #query: 'msg.span_id:"$${__span.spanId}"'
       tags: []
     tracesToMetrics:
       datasourceUid: 'gdev-prometheus'
