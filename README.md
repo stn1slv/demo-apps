@@ -25,7 +25,7 @@ The environment is the following:
 ## Running
 You may want to remove any old containers to start clean:
 ```
-docker rm -f kafka prometheus grafana elasticsearch jaeger otel-collector filebeat tripbooking carbooking flightbooking hotelbooking
+docker rm -f kafka prometheus grafana elasticsearch jaeger otel-collector filebeat trip-booking-app car-booking-app flight-booking-app hotel-booking-app
 ```
 We suggest using two terminal windows to start the following components: 
 - infrastructure components

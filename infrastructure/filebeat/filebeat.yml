@@ -1,5 +1,5 @@
 setup.template.name: "filebeat"
-setup.template.pattern: "filebeat"
+setup.template.pattern: "filebeat-*"
 setup.ilm.enabled: false
 
 filebeat.inputs:
