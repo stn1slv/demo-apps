@@ -22,6 +22,19 @@ The environment is the following:
     - Dashboard for Logs from ElasticSearch
     - Dashboard for Jaeger
 
+## How the telemetry is wired
+Each app runs with the OpenTelemetry Java agent (attached in the Dockerfile) and `camel-opentelemetry-starter` (the agent provides the SDK, exporters and HTTP/Kafka client instrumentation; the starter adds Camel route spans on top of it, since the agent has no Camel 4 instrumentation of its own).
+
+| Signal | Path |
+|---|---|
+| Traces | OTel Java agent → OTLP gRPC → OTel Collector → Jaeger |
+| Metrics | Micrometer OTLP registry → OTLP HTTP → OTel Collector → Prometheus exporter (`:8889`) → Prometheus |
+| Logs | stdout (logback pattern includes `trace_id`/`span_id` from MDC) → Filebeat → Elasticsearch |
+
+Cross-signal correlation is preconfigured in Grafana: the Jaeger datasource links spans to logs (Elasticsearch query on `msg.trace_id`) and to metrics (via the `application` resource attribute, exposed as the `exported_job` label in Prometheus).
+
+The agent's own metrics and logs exporters are disabled (`OTEL_METRICS_EXPORTER=none`, `OTEL_LOGS_EXPORTER=none`): metrics are owned by Micrometer (whose names the Grafana dashboards use) and logs are owned by Filebeat.
+
 ## Running
 You may want to remove any old containers to start clean:
 ```

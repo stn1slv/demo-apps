@@ -15,11 +15,15 @@ scrape_configs:
   #   metrics_path: '/metrics'
   #   static_configs:
   #     - targets: ['jaeger-query:16687']
+  # App metrics are scraped from the collector's Prometheus exporter. The
+  # apps' own 'job' label (service.name) therefore surfaces as
+  # 'exported_job', which the Grafana dashboards filter on. Scraping the
+  # apps directly (jobs below) would break that label contract.
   - job_name: 'otel-collector'
     scrape_interval: 10s
     static_configs:
       - targets: ['otel-collector:8889']
-      # - targets: ['otel-collector:8888']  
+      # - targets: ['otel-collector:8888']
   # - job_name: 'BookingTripService'
   #   metrics_path: '/actuator/prometheus'
   #   static_configs:

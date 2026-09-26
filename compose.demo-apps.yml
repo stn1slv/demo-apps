@@ -1,63 +1,66 @@
 # version: '3.8'
 
+# Shared OpenTelemetry configuration for all demo apps.
+#
+# Telemetry design:
+# - Traces: OTel Java agent -> OTLP gRPC -> otel-collector -> Jaeger.
+#   Camel route spans come from camel-opentelemetry-starter, which publishes
+#   through the agent's GlobalOpenTelemetry (the agent itself has no Camel 4
+#   instrumentation).
+# - Metrics: Micrometer OTLP registry pushes to the collector over OTLP/HTTP
+#   (MANAGEMENT_OTLP_METRICS_EXPORT_URL). The agent's own metrics exporter is
+#   disabled (OTEL_METRICS_EXPORTER=none) so JVM metrics are not exported
+#   twice under colliding Prometheus names.
+# - Logs: written to stdout and shipped by Filebeat to Elasticsearch;
+#   the agent's log exporter is disabled (OTEL_LOGS_EXPORTER=none).
+x-otel-env: &otel-env
+    # W3C tracecontext/baggage for interop, plus B3 multi-header (the apps
+    # log the x-b3-traceid header in some routes).
+    OTEL_PROPAGATORS: tracecontext,baggage,b3multi
+    OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4317
+    OTEL_EXPORTER_OTLP_PROTOCOL: grpc
+    OTEL_TRACES_EXPORTER: otlp
+    OTEL_METRICS_EXPORTER: none
+    OTEL_LOGS_EXPORTER: none
+    MANAGEMENT_OTLP_METRICS_EXPORT_URL: http://otel-collector:4318/v1/metrics # Metrics Exporter URL
+
 services:
     tripbooking:
         image: stn1slv/trip-booking-demo-app:otel
         container_name: trip-booking-app
-        environment: 
-            - OTEL_SERVICE_NAME=trip-booking-app
-            - OTEL_PROPAGATORS=b3multi
-            - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
-            - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
-            - OTEL_TRACES_EXPORTER=otlp
-            - OTEL_METRICS_EXPORTER=otlp
-            - OTEL_LOGS_EXPORTER=none
-            - MANAGEMENT_OTLP_METRICS_EXPORT_URL=http://otel-collector:4318/v1/metrics # Metrics Exporter URL
-            - OTEL_RESOURCE_ATTRIBUTES=application=trip-booking-app
+        environment:
+            <<: *otel-env
+            OTEL_SERVICE_NAME: trip-booking-app
+            # The 'application' resource attribute is used by the Grafana
+            # Jaeger datasource (tracesToMetrics tag mapping) and is also
+            # picked up by the Micrometer OTLP registry.
+            OTEL_RESOURCE_ATTRIBUTES: application=trip-booking-app
         ports:
             - 8080:8080
     carbooking:
         image: stn1slv/car-booking-demo-app:otel
         container_name: car-booking-app
-        environment: 
-            - OTEL_SERVICE_NAME=car-booking-app            
-            - OTEL_PROPAGATORS=b3multi
-            - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
-            - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
-            - OTEL_TRACES_EXPORTER=otlp
-            - OTEL_METRICS_EXPORTER=otlp
-            - OTEL_LOGS_EXPORTER=none
-            - MANAGEMENT_OTLP_METRICS_EXPORT_URL=http://otel-collector:4318/v1/metrics # Metrics Exporter URL
-            - OTEL_RESOURCE_ATTRIBUTES=application=car-booking-app
+        environment:
+            <<: *otel-env
+            OTEL_SERVICE_NAME: car-booking-app
+            OTEL_RESOURCE_ATTRIBUTES: application=car-booking-app
         ports:
             - 8081:8080
     flightbooking:
         image: stn1slv/flight-booking-demo-app:otel
         container_name: flight-booking-app
-        environment: 
-            - OTEL_SERVICE_NAME=flight-booking-app
-            - OTEL_PROPAGATORS=b3multi
-            - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
-            - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
-            - OTEL_TRACES_EXPORTER=otlp
-            - OTEL_METRICS_EXPORTER=otlp
-            - OTEL_LOGS_EXPORTER=none
-            - MANAGEMENT_OTLP_METRICS_EXPORT_URL=http://otel-collector:4318/v1/metrics # Metrics Exporter URL
-            - OTEL_RESOURCE_ATTRIBUTES=application=flight-booking-app
+        environment:
+            <<: *otel-env
+            OTEL_SERVICE_NAME: flight-booking-app
+            OTEL_RESOURCE_ATTRIBUTES: application=flight-booking-app
         ports:
             - 8082:8080
     hotelbooking:
         image: stn1slv/hotel-booking-demo-app:otel
         container_name: hotel-booking-app
-        environment: 
-            - OTEL_SERVICE_NAME=hotel-booking-app
-            - OTEL_PROPAGATORS=b3multi
-            - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
-            - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
-            - OTEL_TRACES_EXPORTER=otlp
-            - OTEL_METRICS_EXPORTER=otlp
-            - OTEL_LOGS_EXPORTER=none
-            - MANAGEMENT_OTLP_METRICS_EXPORT_URL=http://otel-collector:4318/v1/metrics # Metrics Exporter URL
-            - OTEL_RESOURCE_ATTRIBUTES=application=hotel-booking-app
+        environment:
+            <<: *otel-env
+            OTEL_SERVICE_NAME: hotel-booking-app
+            OTEL_RESOURCE_ATTRIBUTES: application=hotel-booking-app
         ports:
             - 8083:8080
