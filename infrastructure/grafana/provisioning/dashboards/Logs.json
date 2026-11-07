@@ -155,7 +155,7 @@
               "type": "logs"
             }
           ],
-          "query": "container.name:*-app msg.severity:* msg.traceId:*",
+          "query": "container.name:*-app msg.severity:* msg.traceid:*",
           "refId": "A",
           "timeField": "@timestamp"
         }
