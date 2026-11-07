@@ -1,63 +1,52 @@
 # version: '3.8'
 
+# Shared OpenTelemetry settings for all demo apps (see "How the telemetry is wired" in README.md).
+# The agent's runtime (JVM) metrics are turned off because Micrometer already exports JVM metrics
+# under the same Prometheus names. The agent's other metrics (for example Kafka client metrics) stay on.
+x-otel-env: &otel-env
+    OTEL_PROPAGATORS: b3multi
+    OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector:4317
+    OTEL_EXPORTER_OTLP_PROTOCOL: grpc
+    OTEL_TRACES_EXPORTER: otlp
+    OTEL_METRICS_EXPORTER: otlp
+    OTEL_LOGS_EXPORTER: none
+    OTEL_INSTRUMENTATION_RUNTIME_TELEMETRY_ENABLED: "false"
+    MANAGEMENT_OTLP_METRICS_EXPORT_URL: http://otel-collector:4318/v1/metrics # Metrics Exporter URL
+
 services:
     tripbooking:
         image: stn1slv/trip-booking-demo-app:otel
         container_name: trip-booking-app
-        environment: 
-            - OTEL_SERVICE_NAME=trip-booking-app
-            - OTEL_PROPAGATORS=b3multi
-            - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
-            - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
-            - OTEL_TRACES_EXPORTER=otlp
-            - OTEL_METRICS_EXPORTER=otlp
-            - OTEL_LOGS_EXPORTER=none
-            - MANAGEMENT_OTLP_METRICS_EXPORT_URL=http://otel-collector:4318/v1/metrics # Metrics Exporter URL
-            - OTEL_RESOURCE_ATTRIBUTES=application=trip-booking-app
+        environment:
+            <<: *otel-env
+            OTEL_SERVICE_NAME: trip-booking-app
+            OTEL_RESOURCE_ATTRIBUTES: application=trip-booking-app
         ports:
             - 8080:8080
     carbooking:
         image: stn1slv/car-booking-demo-app:otel
         container_name: car-booking-app
-        environment: 
-            - OTEL_SERVICE_NAME=car-booking-app            
-            - OTEL_PROPAGATORS=b3multi
-            - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
-            - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
-            - OTEL_TRACES_EXPORTER=otlp
-            - OTEL_METRICS_EXPORTER=otlp
-            - OTEL_LOGS_EXPORTER=none
-            - MANAGEMENT_OTLP_METRICS_EXPORT_URL=http://otel-collector:4318/v1/metrics # Metrics Exporter URL
-            - OTEL_RESOURCE_ATTRIBUTES=application=car-booking-app
+        environment:
+            <<: *otel-env
+            OTEL_SERVICE_NAME: car-booking-app
+            OTEL_RESOURCE_ATTRIBUTES: application=car-booking-app
         ports:
             - 8081:8080
     flightbooking:
         image: stn1slv/flight-booking-demo-app:otel
         container_name: flight-booking-app
-        environment: 
-            - OTEL_SERVICE_NAME=flight-booking-app
-            - OTEL_PROPAGATORS=b3multi
-            - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
-            - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
-            - OTEL_TRACES_EXPORTER=otlp
-            - OTEL_METRICS_EXPORTER=otlp
-            - OTEL_LOGS_EXPORTER=none
-            - MANAGEMENT_OTLP_METRICS_EXPORT_URL=http://otel-collector:4318/v1/metrics # Metrics Exporter URL
-            - OTEL_RESOURCE_ATTRIBUTES=application=flight-booking-app
+        environment:
+            <<: *otel-env
+            OTEL_SERVICE_NAME: flight-booking-app
+            OTEL_RESOURCE_ATTRIBUTES: application=flight-booking-app
         ports:
             - 8082:8080
     hotelbooking:
         image: stn1slv/hotel-booking-demo-app:otel
         container_name: hotel-booking-app
-        environment: 
-            - OTEL_SERVICE_NAME=hotel-booking-app
-            - OTEL_PROPAGATORS=b3multi
-            - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
-            - OTEL_EXPORTER_OTLP_PROTOCOL=grpc
-            - OTEL_TRACES_EXPORTER=otlp
-            - OTEL_METRICS_EXPORTER=otlp
-            - OTEL_LOGS_EXPORTER=none
-            - MANAGEMENT_OTLP_METRICS_EXPORT_URL=http://otel-collector:4318/v1/metrics # Metrics Exporter URL
-            - OTEL_RESOURCE_ATTRIBUTES=application=hotel-booking-app
+        environment:
+            <<: *otel-env
+            OTEL_SERVICE_NAME: hotel-booking-app
+            OTEL_RESOURCE_ATTRIBUTES: application=hotel-booking-app
         ports:
             - 8083:8080
